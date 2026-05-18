@@ -1,121 +1,63 @@
-```python
 import streamlit as st
 import folium
 
-st.set_page_config(
-    page_title="서울 관광지 TOP10",
-    layout="wide"
-)
+# 페이지 설정
+st.set_page_config(page_title="서울 관광지 TOP10", layout="wide")
 
 st.title("🌏 외국인들이 좋아하는 서울 주요 관광지 TOP10")
-st.write("서울의 인기 관광지를 확인해보세요!")
+st.write("서울의 인기 관광지를 지도에서 확인해보세요!")
 
-# 관광지 데이터 (TOP10)
+# 관광지 데이터
 places = [
-    {
-        "name": "경복궁",
-        "lat": 37.5796,
-        "lon": 126.9770,
-        "subway": "경복궁역",
-        "fun": "한복 체험, 궁궐 산책"
-    },
-    {
-        "name": "명동",
-        "lat": 37.5636,
-        "lon": 126.9827,
-        "subway": "명동역",
-        "fun": "쇼핑, 길거리 음식"
-    },
-    {
-        "name": "N서울타워",
-        "lat": 37.5512,
-        "lon": 126.9882,
-        "subway": "명동역",
-        "fun": "야경 감상, 사랑의 자물쇠"
-    },
-    {
-        "name": "북촌한옥마을",
-        "lat": 37.5826,
-        "lon": 126.9830,
-        "subway": "안국역",
-        "fun": "전통 골목 산책, 사진 촬영"
-    },
-    {
-        "name": "홍대거리",
-        "lat": 37.5563,
-        "lon": 126.9220,
-        "subway": "홍대입구역",
-        "fun": "버스킹, 카페 투어"
-    },
-    {
-        "name": "강남",
-        "lat": 37.4979,
-        "lon": 127.0276,
-        "subway": "강남역",
-        "fun": "쇼핑, 맛집 탐방"
-    },
-    {
-        "name": "롯데월드타워",
-        "lat": 37.5131,
-        "lon": 127.1025,
-        "subway": "잠실역",
-        "fun": "전망대, 쇼핑몰"
-    },
-    {
-        "name": "동대문디자인플라자(DDP)",
-        "lat": 37.5665,
-        "lon": 127.0092,
-        "subway": "동대문역사문화공원역",
-        "fun": "전시 관람, 야경"
-    },
-    {
-        "name": "인사동",
-        "lat": 37.5740,
-        "lon": 126.9850,
-        "subway": "안국역",
-        "fun": "전통 기념품, 찻집"
-    },
-    {
-        "name": "한강공원",
-        "lat": 37.5289,
-        "lon": 126.9326,
-        "subway": "여의나루역",
-        "fun": "자전거, 라면 먹기"
-    }
+    ["경복궁", 37.5796, 126.9770, "경복궁역", "한복 체험, 궁궐 산책"],
+    ["명동", 37.5636, 126.9827, "명동역", "쇼핑, 길거리 음식"],
+    ["N서울타워", 37.5512, 126.9882, "명동역", "야경 감상, 사랑의 자물쇠"],
+    ["북촌한옥마을", 37.5826, 126.9830, "안국역", "전통 골목 산책, 사진 촬영"],
+    ["홍대거리", 37.5563, 126.9220, "홍대입구역", "버스킹, 카페 투어"],
+    ["강남", 37.4979, 127.0276, "강남역", "쇼핑, 맛집 탐방"],
+    ["롯데월드타워", 37.5131, 127.1025, "잠실역", "전망대, 쇼핑몰"],
+    ["DDP", 37.5665, 127.0092, "동대문역사문화공원역", "전시 관람, 야경"],
+    ["인사동", 37.5740, 126.9850, "안국역", "전통 기념품, 찻집"],
+    ["한강공원", 37.5289, 126.9326, "여의나루역", "자전거, 라면 먹기"]
 ]
 
 # 지도 생성
-m = folium.Map(
-    location=[37.5665, 126.9780],
-    zoom_start=11
-)
+m = folium.Map(location=[37.5665, 126.9780], zoom_start=11)
 
 # 마커 추가
 for place in places:
+    name = place[0]
+    lat = place[1]
+    lon = place[2]
+    subway = place[3]
+    fun = place[4]
+
     popup_text = (
-        f"{place['name']}<br>"
-        f"가까운 지하철역: {place['subway']}<br>"
-        f"놀거리: {place['fun']}"
+        name + "<br>"
+        + "가까운 지하철역: " + subway + "<br>"
+        + "놀거리: " + fun
     )
 
     folium.Marker(
-        location=[place["lat"], place["lon"]],
+        location=[lat, lon],
         popup=popup_text,
-        tooltip=place["name"]
+        tooltip=name
     ).add_to(m)
 
-# HTML로 지도 표시
+# 지도 HTML 변환
 map_html = m._repr_html_()
 
-st.components.v1.html(
-    map_html,
-    height=600
-)
+# 지도 출력
+st.components.v1.html(map_html, height=600)
 
 st.markdown("---")
 st.subheader("📌 관광지 정보")
 
+# 관광지 정보 출력
 for place in places:
     st.write(
-        f"{place['name']} → 가까운 지하철역: {place['subway']} | 놀거리: {place['fun']}"
+        place[0] + " → 가까운 지하철역: "
+        + place[3]
+        + " | 놀거리: "
+        + place[4]
     )
