@@ -119,4 +119,3 @@ for place in places:
     st.write(
         f"{place['name']} → 가까운 지하철역: {place['subway']} | 놀거리: {place['fun']}"
     )
-```
