@@ -1,15 +1,16 @@
+# Streamlit Cloud용 서울 관광지 TOP10 지도 앱
+
+## app.py
+
+```python
 import streamlit as st
 import folium
 from streamlit_folium import st_folium
 
-# 페이지 설정
-st.set_page_config(
-    page_title="서울 관광지 TOP10",
-    layout="wide"
-)
+st.set_page_config(page_title="서울 관광지 TOP10", layout="wide")
 
 st.title("🌏 외국인들이 좋아하는 서울 주요 관광지 TOP10")
-st.markdown("지도의 마커를 클릭하면 아래에 가까운 지하철역과 놀거리가 표시됩니다.")
+st.markdown("지도를 클릭하면 가까운 지하철역과 놀거리를 아래에서 확인할 수 있습니다.")
 
 # 관광지 데이터
 places = [
@@ -85,34 +86,39 @@ places = [
     }
 ]
 
-# 지도 생성
-m = folium.Map(
-    location=[37.5665, 126.9780],
-    zoom_start=11
-)
+# 서울 중심 지도 생성
+m = folium.Map(location=[37.5665, 126.9780], zoom_start=11)
 
-# 마커 추가
 for place in places:
+    popup_text = f"📍 {place['name']}"
+
     folium.Marker(
         location=[place["lat"], place["lon"]],
+        popup=popup_text,
         tooltip=place["name"],
-        popup=f"""
-        {place['name']}<br>
-        가까운 지하철역: {place['subway']}<br>
-        놀거리: {place['fun']}
-        """,
-        icon=folium.Icon(color="blue")
+        icon=folium.Icon(color="blue", icon="info-sign")
     ).add_to(m)
 
 # 지도 출력
-map_data = st_folium(
-    m,
-    width=1000,
-    height=600
-)
+map_data = st_folium(m, width=1000, height=600)
 
 st.markdown("---")
 st.subheader("📌 관광지 정보")
 
-# 기본 안내
-st.info("지도에서 마커를 클릭하면 팝업으로 관광지 정보가 표시됩니다.")
+clicked_place = None
+
+if map_data and map_data.get("last_object_clicked"):
+    clicked_lat = map_data["last_object_clicked"]["lat"]
+    clicked_lon = map_data["last_object_clicked"]["lng"]
+
+    for place in places:
+        if abs(place["lat"] - clicked_lat) < 0.001 and abs(place["lon"] - clicked_lon) < 0.001:
+            clicked_place = place
+            break
+
+if clicked_place:
+    st.success(
+        f"{clicked_place['name']} → 가까운 지하철역: {clicked_place['subway']} | 놀거리: {clicked_place['fun']}"
+    )
+else:
+    st.info("지도에서 관광지를 클릭해보세요!")
