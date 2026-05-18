@@ -1,8 +1,7 @@
-# app.py
+# streamlit_folium 없이 작동하는 버전 (오류 해결)
 
 import streamlit as st
 import folium
-from streamlit_folium import st_folium
 
 st.set_page_config(
     page_title="서울 관광지 TOP10",
@@ -10,7 +9,7 @@ st.set_page_config(
 )
 
 st.title("🌏 외국인들이 좋아하는 서울 주요 관광지 TOP10")
-st.write("지도에서 관광지를 클릭해보세요!")
+st.write("서울의 인기 관광지를 확인해보세요!")
 
 # 관광지 데이터
 places = [
@@ -34,6 +33,13 @@ places = [
         "lon": 126.9882,
         "subway": "명동역",
         "fun": "야경 감상, 사랑의 자물쇠"
+    },
+    {
+        "name": "북촌한옥마을",
+        "lat": 37.5826,
+        "lon": 126.9830,
+        "subway": "안국역",
+        "fun": "전통 골목 산책, 사진 촬영"
     }
 ]
 
@@ -57,8 +63,14 @@ for place in places:
         tooltip=place["name"]
     ).add_to(m)
 
-# 지도 출력
-st_folium(m, width=1000, height=600)
+# HTML로 저장
+map_html = m._repr_html_()
+
+# Streamlit에 지도 표시
+st.components.v1.html(
+    map_html,
+    height=600
+)
 
 st.markdown("---")
 st.subheader("📌 관광지 정보")
