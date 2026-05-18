@@ -1,6 +1,6 @@
 import streamlit as st
 import folium
-from streamlit_folium import folium_static
+from streamlit_folium import st_folium
 
 # 페이지 설정
 st.set_page_config(
@@ -9,7 +9,7 @@ st.set_page_config(
 )
 
 st.title("🌏 외국인들이 좋아하는 서울 주요 관광지 TOP10")
-st.write("서울의 인기 관광지를 지도에서 확인해보세요!")
+st.markdown("지도의 마커를 클릭하면 아래에 가까운 지하철역과 놀거리가 표시됩니다.")
 
 # 관광지 데이터
 places = [
@@ -93,26 +93,26 @@ m = folium.Map(
 
 # 마커 추가
 for place in places:
-    popup_text = f"""
-    <b>{place['name']}</b><br>
-    가까운 지하철역: {place['subway']}<br>
-    놀거리: {place['fun']}
-    """
-
     folium.Marker(
         location=[place["lat"], place["lon"]],
-        popup=folium.Popup(popup_text, max_width=300),
         tooltip=place["name"],
-        icon=folium.Icon(color="blue", icon="info-sign")
+        popup=f"""
+        {place['name']}<br>
+        가까운 지하철역: {place['subway']}<br>
+        놀거리: {place['fun']}
+        """,
+        icon=folium.Icon(color="blue")
     ).add_to(m)
 
 # 지도 출력
-folium_static(m, width=1000, height=600)
+map_data = st_folium(
+    m,
+    width=1000,
+    height=600
+)
 
 st.markdown("---")
-st.subheader("📌 관광지 간단 정리")
+st.subheader("📌 관광지 정보")
 
-for place in places:
-    st.write(
-        f"**{place['name']}** → 가까운 지하철역: {place['subway']} | 놀거리: {place['fun']}"
-    )
+# 기본 안내
+st.info("지도에서 마커를 클릭하면 팝업으로 관광지 정보가 표시됩니다.")
