@@ -1,8 +1,9 @@
+# app.py
+
 import streamlit as st
 import folium
 from streamlit_folium import st_folium
 
-# 페이지 설정
 st.set_page_config(
     page_title="서울 관광지 TOP10",
     layout="wide"
@@ -33,20 +34,6 @@ places = [
         "lon": 126.9882,
         "subway": "명동역",
         "fun": "야경 감상, 사랑의 자물쇠"
-    },
-    {
-        "name": "북촌한옥마을",
-        "lat": 37.5826,
-        "lon": 126.9830,
-        "subway": "안국역",
-        "fun": "전통 골목 산책, 사진 촬영"
-    },
-    {
-        "name": "홍대거리",
-        "lat": 37.5563,
-        "lon": 126.9220,
-        "subway": "홍대입구역",
-        "fun": "버스킹, 카페 투어"
     }
 ]
 
@@ -59,24 +46,19 @@ m = folium.Map(
 # 마커 추가
 for place in places:
     popup_text = (
-        place["name"] + "<br>"
-        + "가까운 지하철역: " + place["subway"] + "<br>"
-        + "놀거리: " + place["fun"]
+        f"{place['name']}<br>"
+        f"가까운 지하철역: {place['subway']}<br>"
+        f"놀거리: {place['fun']}"
     )
 
     folium.Marker(
         location=[place["lat"], place["lon"]],
         popup=popup_text,
-        tooltip=place["name"],
-        icon=folium.Icon(color="blue")
+        tooltip=place["name"]
     ).add_to(m)
 
 # 지도 출력
-st_folium(
-    m,
-    width=1000,
-    height=600
-)
+st_folium(m, width=1000, height=600)
 
 st.markdown("---")
 st.subheader("📌 관광지 정보")
