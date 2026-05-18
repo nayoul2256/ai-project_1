@@ -125,3 +125,12 @@ else:
 ```
 
 ---
+
+## requirements.txt
+
+```txt
+streamlit
+folium
+streamlit-folium
+```
+
