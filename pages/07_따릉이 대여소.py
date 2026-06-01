@@ -12,7 +12,6 @@ st.title("🚲 서울 따릉이 인기 대여소 TOP10")
 @st.cache_data
 def load_data():
 
-```
 encodings = [
     "cp949",
     "euc-kr",
