@@ -16,11 +16,7 @@ st.markdown("서울에서 가장 많이 이용되는 자전거 대여소 TOP10")
 # ==========================
 # 데이터 불러오기
 # ==========================
-@st.cache_data
-def load_data():
-    return pd.read_csv("bike_top10.csv")
 
-df = load_data()
 
 # ==========================
 # 지도 표시
