@@ -2,24 +2,12 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# ==================================================
-
-# 페이지 설정
-
-# ==================================================
-
 st.set_page_config(
 page_title="서울 따릉이 인기 대여소 TOP10",
 layout="wide"
 )
 
 st.title("🚲 서울 따릉이 인기 대여소 TOP10")
-
-# ==================================================
-
-# 데이터 로드
-
-# ==================================================
 
 @st.cache_data
 def load_data():
@@ -47,22 +35,10 @@ st.stop()
 
 df = load_data()
 
-# ==================================================
-
-# 숫자형 변환
-
-# ==================================================
-
 df["보관대수"] = pd.to_numeric(
 df["보관대수"],
 errors="coerce"
 )
-
-# ==================================================
-
-# TOP10
-
-# ==================================================
 
 st.subheader("🏆 서울 따릉이 인기 대여소 TOP10")
 
@@ -86,19 +62,16 @@ ascending=True
 x="보관대수",
 y="자전거보관소명",
 orientation="h",
-color="보관대수",
 text="보관대수",
+color="보관대수",
 color_continuous_scale="Tealgrn"
-)
-
-fig.update_traces(
-textposition="outside"
 )
 
 fig.update_layout(
 height=650,
 xaxis_title="보관대수",
-yaxis_title="자전거보관소명"
+yaxis_title="자전거보관소명",
+coloraxis_showscale=False
 )
 
 st.plotly_chart(
@@ -115,12 +88,6 @@ use_container_width=True
 
 st.divider()
 
-# ==================================================
-
-# 지도
-
-# ==================================================
-
 st.subheader("🗺️ 서울시 자전거보관소 지도")
 
 map_df = df.dropna(
@@ -132,10 +99,10 @@ map_df,
 lat="WGS84위도",
 lon="WGS84경도",
 hover_name="자전거보관소명",
-hover_data={
-"보관대수": True,
-"관리기관명": True
-},
+hover_data=[
+"보관대수",
+"관리기관명"
+],
 zoom=10,
 height=700
 )
@@ -150,12 +117,6 @@ use_container_width=True
 )
 
 st.divider()
-
-# ==================================================
-
-# 상세정보
-
-# ==================================================
 
 st.subheader("🔍 자전거보관소 상세정보")
 
@@ -191,12 +152,6 @@ f"""
 )
 
 st.divider()
-
-# ==================================================
-
-# 전체 데이터
-
-# ==================================================
 
 st.subheader("📋 전체 데이터 보기")
 
