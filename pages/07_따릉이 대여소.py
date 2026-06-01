@@ -12,25 +12,24 @@ st.title("🚲 서울 따릉이 인기 대여소 TOP10")
 @st.cache_data
 def load_data():
 
-encodings = [
-    "cp949",
-    "euc-kr",
-    "utf-8-sig",
-    "utf-8"
-]
+    encodings = [
+        "cp949",
+        "euc-kr",
+        "utf-8-sig",
+        "utf-8"
+    ]
 
-for enc in encodings:
-    try:
-        return pd.read_csv(
-            "자전거보관소정보_서울특별시.csv",
-            encoding=enc
-        )
-    except:
-        pass
+    for enc in encodings:
+        try:
+            return pd.read_csv(
+                "자전거보관소정보_서울특별시.csv",
+                encoding=enc
+            )
+        except:
+            pass
 
-st.error("CSV 파일을 읽을 수 없습니다.")
-st.stop()
-```
+    st.error("CSV 파일을 읽을 수 없습니다.")
+    st.stop()
 
 df = load_data()
 
