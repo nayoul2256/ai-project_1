@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 
+from streamlit_folium import st_folium
 st.title("서울 자전거 대여소 TOP10")
 
 df = pd.read_csv("bike_top10.csv")
