@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 # TOP10 보관소
 # ==================================================
 df = load_data()
+
 st.subheader("🏆 서울시 보관대수 TOP10")
 
 top10 = (
